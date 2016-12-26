@@ -1,10 +1,12 @@
 package com.yahoo.palagummi.myweatherapp;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -28,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
         String city = cityName.getText().toString();
         String weatherURL = "http://api.openweathermap.org/data/2.5/weather?q="+city+"&APPID=9dd67e4dba6524581f8a490cf8313324";
         task.execute(weatherURL);
+
+        // code to make the keyboard go away once the button is pressed
+        InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE); // gets the service that the system cuurently uses (in this case it is a keyboard which is used to type in the cityName)
+        mgr.hideSoftInputFromWindow(cityName.getWindowToken(),0);
     }
 
     public class DownloadTask extends AsyncTask<String, Void, String> {
