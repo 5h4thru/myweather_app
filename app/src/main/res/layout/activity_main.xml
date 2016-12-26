@@ -54,12 +54,11 @@
         android:onClick="findWeather" />
 
     <TextView
-        android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/textView2"
+        android:id="@+id/resultTextView"
         android:layout_marginBottom="150dp"
         android:textSize="20sp"
         android:textColor="@color/colorPrimary" />

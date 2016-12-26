@@ -3,8 +3,10 @@ package com.yahoo.palagummi.myweatherapp;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,10 +19,15 @@ import java.net.URL;
 public class MainActivity extends AppCompatActivity {
 
     EditText cityName;
+    TextView resultTextView;
 
 
     public void findWeather(View view) {
-
+        // Log.i("city name ", cityName.getText().toString());
+        DownloadTask task = new DownloadTask();
+        String city = cityName.getText().toString();
+        String weatherURL = "http://api.openweathermap.org/data/2.5/weather?q="+city+"&APPID=9dd67e4dba6524581f8a490cf8313324";
+        task.execute(weatherURL);
     }
 
     public class DownloadTask extends AsyncTask<String, Void, String> {
@@ -53,12 +60,19 @@ public class MainActivity extends AppCompatActivity {
             super.onPostExecute(result);
             JSONObject jsonObject;
             JSONArray arr;
+            String message = "";
             try {
                 jsonObject = new JSONObject(result);
                 String weatherInfo = jsonObject.getString("weather");
                 arr = new JSONArray(weatherInfo);
                 for(int i=0; i<arr.length(); i++) {
                     JSONObject jsonPart = arr.getJSONObject(i);
+                    String main = jsonPart.getString("main");
+                    String description = jsonPart.getString("description");
+                    if(main != null && description != null)
+                        message += main + ": " + description + "\r\n";
+                    // resultTextView.setText(main + "\n" + description);
+                    resultTextView.setText(message);
                 }
 
             } catch (Exception e) {
@@ -73,7 +87,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // get the cityName editText
+        // get the cityName editText, resultTextView
         cityName = (EditText) findViewById(R.id.cityName);
+        resultTextView = (TextView) findViewById(R.id.resultTextView);
     }
 }
